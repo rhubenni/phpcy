@@ -81,7 +81,7 @@ function readInput() : array
     return $ret;
 }
 
-# Verifica se o nabegador utilizado é Internet Explorer
+# Verifica se o navegador utilizado é Internet Explorer < 11
 function checkIE() : bool
 {
     $txt=$_SERVER['HTTP_USER_AGENT'];
