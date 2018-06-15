@@ -18,6 +18,7 @@ function rand_hex(int $length = 8) : string
     return (string) \bin2hex(\random_bytes($length));
 }
 
+# Converte Objeto para Array
 function obj2array(object $obj) : array
 {
     $arr = [];
@@ -30,6 +31,7 @@ function obj2array(object $obj) : array
     return $arr;
 }
 
+# Obtem parte de uma string concatenada
 function strpart(string $string, string $delimiter, int $part) : string
 {
     $temp = \explode($delimiter, $string);
@@ -44,11 +46,13 @@ function strpart(string $string, string $delimiter, int $part) : string
     return false;
 }
 
+# Função vazia
 function void() : void
 {
     return;
 }
 
+# Obtem todos os inputs enviados a página
 function readInput() : array
 {
     $ret = [];
@@ -75,4 +79,21 @@ function readInput() : array
     }
     unset($key, $value);
     return $ret;
+}
+
+# Verifica se o nabegador utilizado é Internet Explorer
+function checkIE() : bool
+{
+    $txt=$_SERVER['HTTP_USER_AGENT'];
+    $re1='.*?';
+    $re2='(MSIE)';
+    if(preg_match_all ("/".$re1.$re2."/is", $txt, $matches) > 0) {
+        if($matches[1][0] === 'MSIE')
+        {
+            return true;
+        } else {
+            return false;
+        }
+        return false;
+    }
 }
