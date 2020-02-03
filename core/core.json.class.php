@@ -43,12 +43,17 @@ class JSON
     # Obtem POST enviado em JSON
     public static function parse_post() : array
     {
-        $data = json_decode(file_get_contents('php://input'), true);
+        if(\filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST') {
+            $data = json_decode(file_get_contents('php://input'), true);
+        } else {
+            $data = [null];
+        }
         return [
             'size'    => (is_array($data) > 0) ? count($data) : 0,
-            'data'      => $data
+            'data'    => $data
         ];
     }
+    
     public static function parse_post_item($key) : string
     {
         $data = self::parse_post();

@@ -20,7 +20,7 @@ namespace Cybel\Core\ErrorHandler;
 ]);
 
 
-\ini_set("display_errors",   "off");
+\ini_set("display_errors",   "on");
 \ini_set("html_errors",      "on");
 \ini_set("track_errors",     "on");
 \error_reporting(E_ALL|E_STRICT);
@@ -72,9 +72,10 @@ class Handler {
         }
         if(php_sapi_name() != 'cli')
         {
-            $isJSON = filter_input(INPUT_POST, '_response') ?? \Cybel\Core\JSON::parse_post_item('_response');
+            $isJSON = \filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST' ? \filter_input(INPUT_POST, '_response') ?? \Cybel\Core\JSON::parse_post_item('_response') : null;
+                
             if(
-                    ($_SERVER['REQUEST_METHOD'] === 'POST' && $isJSON === 'text/json') || 
+                    (\filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST' && $isJSON === 'text/json') || 
                     (isset($_SESSION['PHPCy']['REST']) && $_SESSION['PHPCy']['REST'] === true)
             )
             {
@@ -110,19 +111,30 @@ class Handler {
                 break;
 
             default:
-                var_dump($e);
+                $message = get_class($e) .': ' . $e->getMessage() . ' => #' . $e->getLine() . ' in ' . $e->getFile() . '. Trace:';
+                echo $message;
+                echo '<pre>';
+                print_r($e->getTrace());
+                echo '</pre>';
                 break;
         }
     }
     
-    public static function fatal() : bool {
+    public static function fatal() : bool
+    { 
         $error = error_get_last();
-        if(($error["type"] === E_ERROR || $error["type"] === E_COMPILE_ERROR || $error["type"] === E_CORE_ERROR)) {
+        if($error != null && ($error["type"] === E_ERROR || $error["type"] === E_COMPILE_ERROR || $error["type"] === E_CORE_ERROR)) {
             var_dump(['fatal',$error]);
             #print_r([$error["type"], $error["message"], $error["file"], $error["line"]]);
             return true;
         } else {
             return false;
         }
+    }
+    
+    public static function raise(int $httpStatus, int $errorCode, string $errorModule) : void
+    {
+        \http_response_code($httpStatus);
+        die();
     }
 }

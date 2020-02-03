@@ -34,6 +34,9 @@ class headers
     }
     
     # Status de resposta HTTP
+    public static function response_code(int $code) : void {
+        self::status($code);
+    }
     public static function status(int $code) : void
     {
         switch ($code)
