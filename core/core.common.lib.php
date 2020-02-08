@@ -35,15 +35,7 @@ function obj2array(object $obj) : array
 function strpart(string $string, string $delimiter, int $part) : string
 {
     $temp = \explode($delimiter, $string);
-    if(!isset($temp[$part]))
-    {
-        return (string) null;
-    }
-    else
-    {
-        return (string) $temp[$part];
-    }
-    return false;
+    return isset($temp[$part]) ? $temp[$part] : null;
 }
 
 # Função vazia
@@ -81,19 +73,11 @@ function readInput() : array
     return $ret;
 }
 
-# Verifica se o navegador utilizado é Internet Explorer < 11
-function checkIE() : bool
+# Verifica se o navegador utilizado é Internet Explorer < 11 OU preg parametros
+function checkIE(string $r1 = '.*?', $r2 = '(MSIE)') : bool
 {
-    $txt=$_SERVER['HTTP_USER_AGENT'];
-    $re1='.*?';
-    $re2='(MSIE)';
-    if(preg_match_all ("/".$re1.$re2."/is", $txt, $matches) > 0) {
-        if($matches[1][0] === 'MSIE')
-        {
-            return true;
-        } else {
-            return false;
-        }
-        return false;
+    $ua = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT');
+    if(preg_match_all ("/" . $r1 . $r2 . "/is", $ua, $matches) > 0) {
+        return $matches[1][0] === 'MSIE' ? true : false;
     }
 }

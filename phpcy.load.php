@@ -11,7 +11,7 @@ namespace Cybel;
 
 # Informações Gerais
 define("_PHPCY_INFO", [
-    'VERSION'           => '1.806.13-alpha',
+    'VERSION'           => '1.806.13-alpha@20200208',
     'VNAME'             => 'Project One',
     'NAME'              => 'PHPCy/1 Oxygen',
     'LICENSE'           => 'http://creativecommons.org/licenses/by/4.0/',
