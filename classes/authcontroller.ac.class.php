@@ -48,16 +48,14 @@ class AC {
     
     public static function doLogin(array $credentials) : bool
     {
-        if($credentials['user'] === 'test' and $credentials['pass'] === '123') {
-            self::$current_user = $credentials['user'];
-            
-            $status = true;
-        } else {
-            $status = false;
+        self::$current_user = null;
+        $provider = '\AuthController\\' . self::$authMethod . '::auth';
+        $status = $provider($credentials);
+        if($status)
+        {
+            $_SESSION['_AC']['current_user']['timeout'] = time() + self::$timeout;
+            $_SESSION['_AC']['current_user']['name'] = $credentials['user'];
         }
-        $_SESSION['_AC']['current_user']['timeout'] = time() + self::$timeout;
-        $_SESSION['_AC']['current_user']['name'] = $credentials['user'];
-        \session_commit();
         return $status;
     }
     

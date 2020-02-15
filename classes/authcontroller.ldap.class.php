@@ -13,8 +13,11 @@ class LDAP {
     
     use ldap_config;
     
-    public static function auth(string $user, string $pass) : bool
+    public static function auth(array $credentials) : bool
     {
+        $user = $credentials['user'];
+        $pass = $credentials['pass'];
+        
         $adServer = self::$adserver;
         $ldapConn = ldap_connect($adServer);
         
@@ -29,14 +32,10 @@ class LDAP {
             return false;
         }
         
-
         $filter = "(sAMAccountName={$user})";
         $result = \ldap_search($ldapConn,"dc=TPB,dc=CORP",$filter);
-        #\ldap_sort($ldapConn,$result,"sn");
         $info = \ldap_get_entries($ldapConn, $result);
         var_dump($info);
-        #\PHPCybel\Core\HTTP::contentType('json');
-        #echo \json_encode($info, \JSON_NUMERIC_CHECK);
         
         @\ldap_close($ldapConn);
         return true;
