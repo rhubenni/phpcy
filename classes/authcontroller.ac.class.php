@@ -12,7 +12,7 @@ namespace AuthController;
 class AC {
     
     use ac_config;
-    private static $current_user;
+    public static $current_user;
     
     public static function check(bool $redirect = true) : bool
     {

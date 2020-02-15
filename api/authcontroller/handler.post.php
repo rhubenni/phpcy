@@ -1,0 +1,39 @@
+<?php
+declare(strict_types=1);
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+namespace AuthController;
+use Cybel\Core\ErrorHandler;
+
+\Cybel\HTTP\request::allowed_method('POST');
+
+$request = \Cybel\Core\JSON::parse_post();
+
+if(!isset($request['action'])) {
+    ErrorHandler\Handler::raise(400, __LINE__, __FILE__);
+}
+
+switch ($request['action']) {
+    case 'login':
+        if(!isset($request['credentials'])) {
+            ErrorHandler\Handler::raise(400, __LINE__, __FILE__);
+        }
+        $try = \AuthController\AC::doLogin($request['credentials']);
+        $message = ($try === true) ? 'Autenticado' : 'Dados de acesso incorretos';
+        $go = ($try === true) ? '/app' : '#!/authFailed';
+        echo \Cybel\Core\JSON::generate_var([
+            'pass' => $try,
+            'go' => $go,
+            'message' => $message
+        ]);
+        break;
+
+    default:
+        ErrorHandler\Handler::raise(400, __LINE__, __FILE__);
+        break;
+}

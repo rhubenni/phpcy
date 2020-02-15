@@ -20,11 +20,12 @@ class DEMO {
             return false;
         } else {
             if($credentials['user'] === self::$demoLogin && $credentials['pass'] === self::$demoLogin) {
-                self::$current_user = $credentials['user'];
+                AC::$current_user = $credentials['user'];
                 $status = true;
             } else {
                 $status = false;
             }
         }
+        return $status;
     }
 }
