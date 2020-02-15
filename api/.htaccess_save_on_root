@@ -1,0 +1,7 @@
+# save in root directory
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^api\/(.*)$ ./phpcy/api/_apiman_.php?api=$1 [L,QSA]

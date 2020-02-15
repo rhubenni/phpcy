@@ -81,3 +81,11 @@ function checkIE(string $r1 = '.*?', $r2 = '(MSIE)') : bool
         return $matches[1][0] === 'MSIE' ? true : false;
     }
 }
+
+# Sanitiza string para inclusão segura de arquivo na pasta local
+function file_string_sanitizer(string $str) : string
+{
+    $str = \mb_eregi_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $str);
+    $str = \mb_eregi_replace("([\.]{2,})", '', $str);
+    return $str;
+}
