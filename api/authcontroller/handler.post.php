@@ -23,7 +23,27 @@ switch ($request['action']) {
         if(!isset($request['credentials'])) {
             ErrorHandler\Handler::raise(400, __LINE__, __FILE__);
         }
-        $try = \AuthController\AC::doLogin($request['credentials']);
+        try {
+            $try = \AuthController\AC::doLogin($request['credentials']);
+        } catch (\mysqli_sql_exception $e) {
+            $message = 'Erro: O servidor de banco de dados está offline.';
+            $go = '#!/authSystemError';
+            echo \Cybel\Core\JSON::generate_var([
+                'pass' => false,
+                'go' => $go,
+                'message' => $message
+            ]);
+            break;
+        } catch (\Exception $e) {
+            $message = 'Erro interno';
+            $go = '#!/authSystemError';
+            echo \Cybel\Core\JSON::generate_var([
+                'pass' => false,
+                'go' => $go,
+                'message' => $message
+            ]);
+            break;
+        }
         $message = ($try === true) ? 'Autenticado' : 'Dados de acesso incorretos';
         $go = ($try === true) ? '/app' : '#!/authFailed';
         echo \Cybel\Core\JSON::generate_var([
