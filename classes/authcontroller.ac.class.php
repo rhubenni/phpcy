@@ -34,7 +34,7 @@ class AC {
     {
         self::logout();
         \Cybel\HTTP\headers::response_code(401);
-        \Cybel\HTTP\headers::redirect('/AuthController/Expired');
+        \Cybel\HTTP\headers::redirect('/?Expired');
     }
     
     public static function logout() : void
@@ -54,7 +54,7 @@ class AC {
         if($status)
         {
             $_SESSION['_AC']['current_user']['timeout'] = time() + self::$timeout;
-            $_SESSION['_AC']['current_user']['name'] = $credentials['user'];
+            $_SESSION['_AC']['current_user']['ident_name'] = $credentials['user'];
         }
         return $status;
     }
@@ -62,5 +62,10 @@ class AC {
     public static function get_session_token() : string
     {
         return \base64_encode(\str_rot13(\session_id()));
+    }
+    
+    public static function check_permission(string $flag) : bool
+    {
+        return true;
     }
 }
