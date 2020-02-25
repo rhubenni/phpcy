@@ -27,6 +27,7 @@ class NATIVE {
         }
         return $status;
     }
+    
     private static function auth_mysql(array $credentials) : bool
     {
         $db = new \Cybel\DB\MySQL('mysql.default');
@@ -36,15 +37,10 @@ class NATIVE {
         $user = $conn->real_escape_string($credentials['user']);
         $pass = \hash('sha256', $conn->real_escape_string($credentials['pass']));
         $query->prepare("
-            SELECT      ACUS_ID
-                        ,UserName
-                        ,UserMail
+            SELECT      ACUS_ID, UserName, UserMail
             FROM        sge.ac_user
-            WHERE       UserLogin = ?
-                        AND UserPass = ?
-                        AND UserEnabled = 1
+            WHERE       UserLogin = ? AND UserPass = ? AND UserEnabled = 1
         ");
-        
         $query->bind_param('ss', $user, $pass);
         $query->execute();
         $result = $query->get_result();
