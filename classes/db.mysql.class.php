@@ -15,11 +15,14 @@ class MySQL {
     use db_config;
     public $driver_name = 'MySQL';
     public $conn;
+    public $driver;
     
     public function __construct(string $credentialset = 'mysql.default')
     {
-        $this->conn = mysqli_init();
-        $this->conn->options(MYSQLI_INIT_COMMAND, 'SET AUTOCOMMIT = 0');
+        $this->driver = new \mysqli_driver();
+        $this->driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
+        $this->conn = \mysqli_init();
+        $this->conn->options(\MYSQLI_INIT_COMMAND, 'SET AUTOCOMMIT = 0');
         if($credentialset === 'phpini') {
             $this->conn->real_connect(  \ini_get("mysqli.default_host"),
                                         \ini_get("mysqli.default_user"),
