@@ -28,4 +28,8 @@ class DEMO {
         }
         return $status;
     }
+    private static function check_permission(string $flag) : bool
+    {
+        return true;
+    }
 }

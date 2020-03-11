@@ -66,6 +66,12 @@ class AC {
     
     public static function check_permission(string $flag) : bool
     {
-        return true;
+        if(method_exists('\AuthController\\' . self::$authMethod, 'check_permission')) {
+            $call = '\AuthController\\' . self::$authMethod . '::check_permission';
+            $status = $call($flag);
+        } else {
+            $status = false;
+        }
+        return $status;
     }
 }

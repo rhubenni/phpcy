@@ -73,7 +73,7 @@ class Handler {
         if(php_sapi_name() != 'cli')
         {
             $isJSON = \filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST' ? \filter_input(INPUT_POST, '_response') ?? \Cybel\Core\JSON::parse_post_item('_response') : null;
-                
+            
             if(
                     (\filter_input(INPUT_SERVER, 'REQUEST_METHOD') === 'POST' && $isJSON === 'text/json') || 
                     (isset($_SESSION['PHPCy']['REST']) && $_SESSION['PHPCy']['REST'] === true)

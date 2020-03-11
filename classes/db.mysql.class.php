@@ -42,5 +42,20 @@ class MySQL {
                                         $this->credentialset[$credentialset]["flags"]
             );
         }
+        $this->conn->query("SET NAMES 'utf8'");
+    }
+    
+    public function only_one($result) : bool
+    {
+        if($result->num_rows !== 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    public function arr_replace($obj, $cols, $vals) : bool
+    {
+        
     }
 }
